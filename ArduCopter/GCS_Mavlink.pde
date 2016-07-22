@@ -985,6 +985,30 @@ void GCS_MAVLINK::handleMessage(mavlink_message_t* msg)
         break;
     }
 
+    case MAVLINK_MSG_ID_MANUAL_CONTROL:                // MAV ID: 69
+	{
+		mavlink_manual_control_t packet;
+		mavlink_msg_manual_control_decode(msg, &packet);
+		int16_t v[4];
+
+		/* roll */
+		v[0] = packet.y / 2 + 1500;
+		/* pitch */
+		v[1] = -(packet.x) / 2 + 1500;
+		/* yaw */
+		v[3] = packet.r / 2 + 1500;
+		/* throttle */
+		v[2] = min(max(packet.z / 0.9f + 800, 1000.0f), 2000.0f);
+
+		// record that rc are overwritten so we can trigger a failsafe if we lose contact with groundstation
+		failsafe.rc_override_active = hal.rcin->set_overrides(v, 4);
+
+		// a RC override message is considered to be a 'heartbeat' from the ground station for failsafe purposes
+		failsafe.last_heartbeat_ms = millis();
+
+		break;
+	}
+
     case MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE:       // MAV ID: 70
     {
         // allow override of RC channel values for HIL

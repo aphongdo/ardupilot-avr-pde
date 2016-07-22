@@ -81,7 +81,7 @@
  # define EPM_ENABLED DISABLED
  # define CLI_ENABLED           DISABLED
  # define FRSKY_TELEM_ENABLED   DISABLED
- # define NAV_GUIDED            DISABLED
+ # define NAV_GUIDED            ENABLED
 #endif
 
 

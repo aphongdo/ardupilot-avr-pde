@@ -69,7 +69,7 @@ LIBOBJS			:=	$(SKETCHLIBOBJS)
 HARDWARE_DIR		:=	$(firstword $(wildcard $(SKETCHBOOK)/hardware/$(HARDWARE) \
 							$(ARDUINO)/hardware/$(HARDWARE)))
 ifeq ($(HARDWARE_DIR),)
-$(error ERROR: hardware directory for $(HARDWARE) not found)
+$(error ERROR: hardware directory for $(HARDWARE) not found $(ARDUINO))
 endif
 
 # Find the boards.txt that we are using
